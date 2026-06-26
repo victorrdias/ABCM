@@ -1,9 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
-import {
-  isFirebaseAdminConfigured,
-  revokeSessionCookie,
-} from "@/lib/auth/session-server";
+import { revokeSessionCookie } from "@/lib/auth/session-server";
+import { isFirebaseAdminConfigured } from "@/lib/firebase/admin-config";
 import { SESSION_COOKIE_NAME } from "@/lib/auth/session";
+
+export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
   const response = NextResponse.json({ ok: true });

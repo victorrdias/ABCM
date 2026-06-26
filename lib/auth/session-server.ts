@@ -1,8 +1,9 @@
-import { getFirebaseAdminAuth, isFirebaseAdminConfigured } from "@/lib/firebase/admin";
+import { isFirebaseAdminConfigured } from "@/lib/firebase/admin-config";
 import type { SessionUser } from "./session";
 
 export async function createSessionCookie(idToken: string): Promise<string> {
-  const auth = getFirebaseAdminAuth();
+  const { getFirebaseAdminAuth } = await import("@/lib/firebase/admin");
+  const auth = await getFirebaseAdminAuth();
   const expiresIn = 60 * 60 * 24 * 5 * 1000;
 
   return auth.createSessionCookie(idToken, { expiresIn });
@@ -11,7 +12,8 @@ export async function createSessionCookie(idToken: string): Promise<string> {
 export async function verifySessionCookie(
   sessionCookie: string,
 ): Promise<SessionUser> {
-  const auth = getFirebaseAdminAuth();
+  const { getFirebaseAdminAuth } = await import("@/lib/firebase/admin");
+  const auth = await getFirebaseAdminAuth();
   const decoded = await auth.verifySessionCookie(sessionCookie, true);
 
   return {
@@ -22,7 +24,8 @@ export async function verifySessionCookie(
 }
 
 export async function revokeSessionCookie(sessionCookie: string): Promise<void> {
-  const auth = getFirebaseAdminAuth();
+  const { getFirebaseAdminAuth } = await import("@/lib/firebase/admin");
+  const auth = await getFirebaseAdminAuth();
   const decoded = await auth.verifySessionCookie(sessionCookie);
 
   await auth.revokeRefreshTokens(decoded.sub);

@@ -1,7 +1,4 @@
-import {
-  getFirebaseAdminDb,
-  isFirebaseAdminConfigured,
-} from "@/lib/firebase/admin";
+import { isFirebaseAdminConfigured } from "@/lib/firebase/admin-config";
 
 export type AssociateProfile = {
   associateType?: string;
@@ -67,7 +64,8 @@ export async function getAssociateProfile(
     return null;
   }
 
-  const snapshot = await getFirebaseAdminDb()
+  const { getFirebaseAdminDb } = await import("@/lib/firebase/admin");
+  const snapshot = await (await getFirebaseAdminDb())
     .collection("associates")
     .doc(uid)
     .get();

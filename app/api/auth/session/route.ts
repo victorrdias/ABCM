@@ -1,12 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
-import {
-  createSessionCookie,
-  isFirebaseAdminConfigured,
-} from "@/lib/auth/session-server";
+import { createSessionCookie } from "@/lib/auth/session-server";
+import { isFirebaseAdminConfigured } from "@/lib/firebase/admin-config";
 import {
   SESSION_COOKIE_NAME,
   SESSION_MAX_AGE_SEC,
 } from "@/lib/auth/session";
+
+export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
   if (!isFirebaseAdminConfigured()) {

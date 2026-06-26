@@ -1,8 +1,5 @@
 import { cookies } from "next/headers";
-import {
-  isFirebaseAdminConfigured,
-  verifySessionCookie,
-} from "@/lib/auth/session-server";
+import { isFirebaseAdminConfigured } from "@/lib/firebase/admin-config";
 import { SESSION_COOKIE_NAME, type SessionUser } from "@/lib/auth/session";
 
 export async function getSessionUser(): Promise<SessionUser | null> {
@@ -18,6 +15,7 @@ export async function getSessionUser(): Promise<SessionUser | null> {
       return null;
     }
 
+    const { verifySessionCookie } = await import("@/lib/auth/session-server");
     return await verifySessionCookie(sessionCookie);
   } catch {
     return null;
