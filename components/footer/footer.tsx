@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { navLinks } from "@/lib/navigation";
+import { DATA_PROTECTION_CONTACT_EMAIL } from "@/lib/legal/constants";
 
 export function Footer() {
   return (
@@ -72,6 +73,21 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} Associação Brasileira de Cannabis
             Medicinal (ABCM). Todos os direitos reservados.
+          </p>
+          <p className="mt-2">
+            <Link
+              href="/politica-de-privacidade"
+              className="font-medium text-brand-blue hover:underline"
+            >
+              Política de Privacidade
+            </Link>
+            {" · "}
+            <a
+              href={`mailto:${DATA_PROTECTION_CONTACT_EMAIL}`}
+              className="hover:text-brand-blue"
+            >
+              {DATA_PROTECTION_CONTACT_EMAIL}
+            </a>
           </p>
         </div>
       </div>

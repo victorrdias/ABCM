@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { navLinks } from "@/lib/navigation";
+import { HeaderAuthActions } from "./header-auth-actions";
 
 export function Header() {
   const pathname = usePathname();
@@ -44,18 +45,7 @@ export function Header() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
-          <Link
-            href="/login"
-            className="rounded-full px-4 py-2 text-sm font-medium text-brand-blue transition-colors hover:bg-brand-green-light"
-          >
-            Entrar
-          </Link>
-          <Link
-            href="/nossos-produtos"
-            className="rounded-full border border-brand-blue px-4 py-2 text-sm font-medium text-brand-blue transition-colors hover:bg-brand-green-light"
-          >
-            Produtos
-          </Link>
+          <HeaderAuthActions />
           <Link
             href="/como-associar"
             className="rounded-full bg-brand-blue px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-blue-dark"
@@ -94,20 +84,7 @@ export function Header() {
             ))}
           </nav>
           <div className="mt-4 flex flex-col gap-2 border-t border-slate-200 pt-4">
-            <Link
-              href="/login"
-              onClick={() => setMobileOpen(false)}
-              className="rounded-full px-4 py-3 text-center text-sm font-medium text-brand-blue hover:bg-brand-green-light"
-            >
-              Entrar / Cadastrar
-            </Link>
-            <Link
-              href="/nossos-produtos"
-              onClick={() => setMobileOpen(false)}
-              className="rounded-full border border-brand-blue px-4 py-3 text-center text-sm font-medium text-brand-blue hover:bg-brand-green-light"
-            >
-              Nossos Produtos
-            </Link>
+            <HeaderAuthActions mobile onNavigate={() => setMobileOpen(false)} />
             <Link
               href="/como-associar"
               onClick={() => setMobileOpen(false)}

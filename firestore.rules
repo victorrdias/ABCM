@@ -1,0 +1,15 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /associates/{userId} {
+      allow read, update, delete: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.lgpdConsent.privacyPolicyVersion is string
+        && request.resource.data.lgpdConsent.privacyPolicyAcceptedAt != null
+        && request.resource.data.lgpdConsent.sensitiveDataProcessingAcceptedAt != null;
+    }
+  }
+}

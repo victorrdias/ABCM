@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Footer } from "@/components/footer/footer";
-import { PagePlaceholder } from "@/components/ui/page-placeholder";
+import { AssociationGuide } from "@/components/como-associar/association-guide";
 
 export const metadata: Metadata = {
   title: "Como Associar",
@@ -9,11 +9,11 @@ export const metadata: Metadata = {
 export default function ComoAssociarPage() {
   return (
     <>
-      <PagePlaceholder
-        title="Como se associar"
-        description="Torne-se associado da ABCM e dê o primeiro passo no seu tratamento com cannabis medicinal. Em breve, você poderá escolher seu plano e iniciar sua associação por aqui."
-        cta={{ label: "Criar cadastro", href: "/register" }}
-      />
+      <section className="bg-surface-muted py-10 sm:py-14">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <AssociationGuide />
+        </div>
+      </section>
       <Footer />
     </>
   );

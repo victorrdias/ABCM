@@ -1,27 +1,30 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Footer } from "@/components/footer/footer";
-import { PagePlaceholder } from "@/components/ui/page-placeholder";
+import { RegisterForm } from "@/components/register/register-form";
+import { redirectIfAuthenticated } from "@/lib/auth/require-session";
 
 export const metadata: Metadata = {
   title: "Cadastrar",
 };
 
-export default function RegisterPage() {
+export default async function RegisterPage() {
+  await redirectIfAuthenticated();
+
   return (
     <>
-      <PagePlaceholder
-        title="Criar cadastro"
-        description="Cadastre-se para iniciar sua associação e ter acesso ao acolhimento, orientação e produtos da ABCM."
-        cta={{ label: "Como associar", href: "/como-associar" }}
-      />
-      <div className="mx-auto max-w-3xl px-4 pb-16 sm:px-6 lg:px-8">
-        <p className="text-sm text-text-muted">
-          Já possui conta?{" "}
-          <Link href="/login" className="font-medium text-brand-blue hover:underline">
-            Entrar
-          </Link>
-        </p>
+      <section className="bg-surface-muted py-10 sm:py-12">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <RegisterForm />
+        </div>
+      </section>
+      <div className="pb-8 text-center">
+        <Link
+          href="/politica-de-privacidade"
+          className="text-sm font-medium text-brand-blue hover:underline"
+        >
+          Política de Privacidade
+        </Link>
       </div>
       <Footer />
     </>
