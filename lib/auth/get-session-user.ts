@@ -20,7 +20,8 @@ export async function getSessionUser(): Promise<SessionUser | null> {
   try {
     return await verifySessionCookie(sessionCookie);
   } catch {
-    cookieStore.delete(SESSION_COOKIE_NAME);
+    // Cookie deletion is only allowed in Route Handlers / Server Actions,
+    // not during Server Component render — deleting here causes a 500.
     return null;
   }
 }

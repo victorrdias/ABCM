@@ -6,15 +6,31 @@ let adminApp: App | undefined;
 let adminAuth: Auth | undefined;
 let adminDb: Firestore | undefined;
 
-function getAdminCredentials() {
-  const projectId = process.env.FIREBASE_ADMIN_PROJECT_ID;
-  const clientEmail = process.env.FIREBASE_ADMIN_CLIENT_EMAIL;
-  const privateKey = process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(
-    /\\n/g,
-    "\n",
-  );
+function normalizePrivateKey(raw: string) {
+  let key = raw.trim();
 
-  if (!projectId || !clientEmail || !privateKey) {
+  if (
+    (key.startsWith('"') && key.endsWith('"')) ||
+    (key.startsWith("'") && key.endsWith("'"))
+  ) {
+    key = key.slice(1, -1);
+  }
+
+  return key.replace(/\\n/g, "\n");
+}
+
+function getAdminCredentials() {
+  const projectId = process.env.FIREBASE_ADMIN_PROJECT_ID?.trim();
+  const clientEmail = process.env.FIREBASE_ADMIN_CLIENT_EMAIL?.trim();
+  const privateKeyRaw = process.env.FIREBASE_ADMIN_PRIVATE_KEY;
+
+  if (!projectId || !clientEmail || !privateKeyRaw) {
+    return null;
+  }
+
+  const privateKey = normalizePrivateKey(privateKeyRaw);
+
+  if (!privateKey.includes("BEGIN PRIVATE KEY")) {
     return null;
   }
 
@@ -35,11 +51,19 @@ export function getFirebaseAdminApp(): App {
   if (!adminApp) {
     const credentials = getAdminCredentials()!;
 
-    adminApp = getApps().length
-      ? getApps()[0]
-      : initializeApp({
-          credential: cert(credentials),
-        });
+    try {
+      adminApp = getApps().length
+        ? getApps()[0]
+        : initializeApp({
+            credential: cert(credentials),
+          });
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Invalid Firebase Admin credentials";
+      throw new Error(
+        `Firebase Admin failed to initialize. Check FIREBASE_ADMIN_PRIVATE_KEY in Vercel (no quotes, valid PEM). ${message}`,
+      );
+    }
   }
 
   return adminApp;

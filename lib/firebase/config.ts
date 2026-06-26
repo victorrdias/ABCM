@@ -8,14 +8,23 @@ const firebaseEnvKeys = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 } as const;
 
+const requiredFirebaseEnvKeys = [
+  "apiKey",
+  "authDomain",
+  "projectId",
+  "storageBucket",
+  "messagingSenderId",
+  "appId",
+] as const;
+
 function assertFirebaseConfig() {
-  const missing = Object.entries(firebaseEnvKeys)
-    .filter(([, value]) => !value)
-    .map(([key]) => key);
+  const missing = requiredFirebaseEnvKeys.filter((key) => !firebaseEnvKeys[key]);
 
   if (missing.length > 0) {
     throw new Error(
-      `Missing Firebase env vars: ${missing.join(", ")}. Copy .env.example to .env.local and fill in your project keys.`,
+      `Missing Firebase env vars: ${missing.join(", ")}. ` +
+        "Add NEXT_PUBLIC_FIREBASE_* in your hosting provider (e.g. Vercel → Settings → Environment Variables) " +
+        "for Production, then redeploy. Local: copy .env.example to .env.local.",
     );
   }
 }
@@ -30,6 +39,6 @@ export function getFirebaseConfig() {
     storageBucket: firebaseEnvKeys.storageBucket!,
     messagingSenderId: firebaseEnvKeys.messagingSenderId!,
     appId: firebaseEnvKeys.appId!,
-    measurementId: firebaseEnvKeys.measurementId!,
+    measurementId: firebaseEnvKeys.measurementId,
   };
 }
