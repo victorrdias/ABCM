@@ -1,4 +1,7 @@
 import type { NextConfig } from "next";
+import path from "node:path";
+
+const projectRoot = path.join(__dirname);
 
 const requiredPublicFirebaseEnv = [
   "NEXT_PUBLIC_FIREBASE_API_KEY",
@@ -50,7 +53,11 @@ function validateEnvAtBuildTime() {
 validateEnvAtBuildTime();
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  serverExternalPackages: ["firebase-admin"],
+  outputFileTracingRoot: projectRoot,
+  turbopack: {
+    root: projectRoot,
+  },
 };
 
 export default nextConfig;
