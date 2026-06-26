@@ -40,9 +40,13 @@ export async function POST(request: NextRequest) {
     });
 
     return response;
-  } catch {
+  } catch (error) {
+    const detail =
+      error instanceof Error ? error.message : String(error);
+    console.error("[api/auth/session] createSessionCookie failed:", detail);
+
     return NextResponse.json(
-      { error: "Não foi possível criar a sessão." },
+      { error: "Não foi possível criar a sessão.", detail },
       { status: 401 },
     );
   }
