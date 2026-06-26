@@ -1,7 +1,6 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import {
   getFirebaseAuthErrorMessage,
   signInWithEmail,
@@ -10,8 +9,6 @@ import { establishSession } from "@/lib/auth/session-client";
 import type { LoginFormValues } from "@/lib/login/schema";
 
 export function useLoginMutation() {
-  const router = useRouter();
-
   return useMutation({
     mutationKey: ["login"],
     mutationFn: async ({ email, password }: LoginFormValues) => {
@@ -29,7 +26,9 @@ export function useLoginMutation() {
       }
     },
     onSuccess: () => {
-      router.push("/conta");
+      // Hard navigation guarantees the new session cookie is sent and
+      // bypasses the Router Cache, avoiding the /conta <-> /login loop.
+      window.location.replace("/conta");
     },
   });
 }
